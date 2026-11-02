@@ -36,7 +36,7 @@
 <body>
   <header>
     <h1>서울시 동물병원 지도</h1>
-    <p>초기 시제품 · 샘플 데이터이며 실제 병원 정보가 아닙니다.</p>
+    <p> 11조 예시 지도.</p>
     <div class="legend">
       <span class="green">● 정상영업</span>
       <span class="red">● 휴업</span>
@@ -74,7 +74,7 @@
 
     function drawMap() {
       const map = new kakao.maps.Map(document.getElementById("map"), {
-        center: new kakao.maps.LatLng(37.5665, 126.9780),
+        center: new kakao.maps.LatLng(37.6194, 127.0598),
         level: 7
       });
 
@@ -150,7 +150,7 @@
         new kakao.maps.Marker({
           map,
           position,
-          title: "사용자 위치",
+          title: "사용자 위치(광운대학교)",
           image: markerImage("#2563eb")
         });
 
