@@ -7,9 +7,10 @@ class HospitalMapView:
     """병원 지도 표시용 데이터와 HTML을 관리합니다. 담당: 오현우"""
 
     STATUS_MAP = {
-        "영업": "정상영업",
-        "정상영업": "정상영업",
-        "휴업": "휴업",
+    "영업": "정상영업",
+    "정상영업": "정상영업",
+    "정상 영업": "정상영업",
+    "휴업": "휴업",
     }
 
     def __init__(self):
@@ -44,8 +45,8 @@ class HospitalMapView:
 
             try:
                 latitude, longitude = self._coordinates(
-                    hospital.get("latitude"),
-                    hospital.get("longitude"),
+                hospital.get("lat", hospital.get("latitude")),
+                hospital.get("lng", hospital.get("longitude")),
                 )
             except (TypeError, ValueError):
                 continue
