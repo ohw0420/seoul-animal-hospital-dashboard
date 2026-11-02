@@ -65,7 +65,6 @@ def main():
 
     server = HTTPServer(("127.0.0.1", 8000), MapHandler)
     print("접속 주소: http://localhost:8000")
-    print("종료: Ctrl+C")
 
     try:
         server.serve_forever()
