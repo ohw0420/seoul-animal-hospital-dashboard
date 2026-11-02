@@ -21,32 +21,32 @@ def main():
 
     view.render_hospitals([
         {
-            "name": "샘플 행복동물병원",
+            "name": "동물병원 1",
             "status": "정상영업",
-            "phone": "샘플 번호",
-            "address": "서울 중구 시연용 주소",
-            "latitude": 37.5665,
-            "longitude": 126.9780,
+            "phone": "02-111-1111",
+            "address": "서울시 노원구 시연용 주소",
+            "latitude": 37.6215,
+            "longitude": 127.0575,
         },
         {
-            "name": "샘플 사랑동물병원",
+            "name": "동물병원 2",
+            "status": "정상영업",
+            "phone": None,
+            "address": "서울시 노원구 시연용 주소",
+            "latitude": 37.6170,
+            "longitude": 127.0560,
+        },
+        {
+            "name": "동물병원 3",
             "status": "휴업",
-            "phone": None,
-            "address": "서울 중구 시연용 주소",
-            "latitude": 37.5635,
-            "longitude": 126.9840,
-        },
-        {
-            "name": "샘플 폐업병원",
-            "status": "폐업",
-            "phone": None,
-            "address": "표시 제외 확인용",
-            "latitude": 37.5680,
-            "longitude": 126.9820,
+            "phone": "02-333-3333",
+            "address": "서울시 노원구 시연용 주소",
+            "latitude": 37.6180,
+            "longitude": 127.0640,
         },
     ])
 
-    view.show_user_location(37.5650, 126.9800)
+    view.show_user_location(37.6194, 127.0598)
     view.show_search_radius(1000)
 
     class MapHandler(BaseHTTPRequestHandler):
