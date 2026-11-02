@@ -1,4 +1,3 @@
-class DashboardController:
 """
 DashboardController
 - 지도 화면(대시보드)에 필요한 데이터를 모아서 넘겨주는 클래스
