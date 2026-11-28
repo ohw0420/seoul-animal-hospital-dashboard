@@ -5,7 +5,8 @@ import unittest
 from pathlib import Path
 from unittest.mock import Mock
 
-from location_service import LocationService, UserLocation
+from location_service import LocationService
+from user_location import UserLocation
 from src.dashboard_controller import DashboardController
 from src.hospital_repository import HospitalRepository
 
