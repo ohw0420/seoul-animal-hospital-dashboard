@@ -41,7 +41,7 @@ class DashboardController:
             "district_counts": self.get_district_counts(),
         }
 
-     def search_nearby(self, address, radius_km, location_service, user_location):
+    def search_nearby(self, address, radius_km, location_service, user_location):
         """주소 기준 반경 radius_km 안의 병원(정상·휴업)을 가까운 순으로 반환"""
         if not location_service.setUserLocation(user_location, address):
             raise ValueError(f"주소를 찾을 수 없습니다: {address}")

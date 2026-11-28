@@ -25,10 +25,17 @@ class HospitalRepository:
     REQUIRED = {"관리번호", "사업장명", "좌표정보(X)", "좌표정보(Y)"}
 
     def __init__(self, location_service: Optional["LocationService"] = None):
-        if location_service is not None and not callable(
-            getattr(location_service, "convert_coordinates", None)
-        ):
-            raise ValueError("위치 서비스에는 convert_coordinates(x, y) 메서드가 필요합니다.")
+        self._coordinate_converter = None
+        if location_service is not None:
+            converter = getattr(location_service, "convert_coordinates", None)
+            if not callable(converter):
+                converter = getattr(location_service, "convertPoint", None)
+            if not callable(converter):
+                raise ValueError(
+                    "위치 서비스에는 convert_coordinates(x, y) 또는 "
+                    "convertPoint(x, y) 메서드가 필요합니다."
+                )
+            self._coordinate_converter = converter
         self._location_service = location_service
         self._hospitals = []
         self.encoding = ""
@@ -105,7 +112,7 @@ class HospitalRepository:
         dataframe["좌표정보(Y)"] = pd.to_numeric(dataframe["좌표정보(Y)"], errors="coerce")
         if self._location_service is not None:
             dataframe["coordinates"] = dataframe.apply(
-                lambda row: self._location_service.convert_coordinates(
+                lambda row: self._convert_coordinates(
                     row["좌표정보(X)"], row["좌표정보(Y)"]
                 ), axis=1
             )
@@ -133,6 +140,25 @@ class HospitalRepository:
                        "중복 관리번호 제외": duplicates, "필수값 누락·형식 오류 제외": invalid,
                        **dataframe["status"].value_counts().to_dict()}
         return self.find_all()
+
+    def _convert_coordinates(self, x: float, y: float) -> Optional[tuple]:
+        """원본 좌표가 유효할 때 변환하고, 유효한 (위도, 경도)만 보관한다."""
+        if not (math.isfinite(x) and math.isfinite(y) and x > 0 and y > 0):
+            return None
+        coordinates = self._coordinate_converter(x, y)
+        if coordinates is None:
+            return None
+        try:
+            latitude, longitude = coordinates
+            latitude, longitude = float(latitude), float(longitude)
+        except (TypeError, ValueError, OverflowError):
+            return None
+        if not (
+            math.isfinite(latitude) and math.isfinite(longitude)
+            and -90 <= latitude <= 90 and -180 <= longitude <= 180
+        ):
+            return None
+        return latitude, longitude
 
     def _read_dataframe(self, raw: bytes) -> tuple:
         """식별번호·전화번호의 앞자리 0과 'NA' 같은 실제 문자열을 보존한다."""
@@ -176,3 +202,4 @@ class HospitalRepository:
         위도·경도가 필요하면 생성 시 위치 서비스를 전달한 뒤 load()한다.
         """
         return [hospital.to_dict() for hospital in self._hospitals]
+
